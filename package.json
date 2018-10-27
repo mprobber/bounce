@@ -1,0 +1,22 @@
+{
+  "name": "bounce",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "mobx": "^5.5.2",
+    "mobx-react": "^5.3.5",
+    "polished": "^2.3.0",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "styled-components": "^4.0.2",
+    "superagent": "^4.0.0-beta.5"
+  },
+  "scripts": {
+    "start": "webpack-dev-server",
+    "build": "yarn build:static && yarn workspace scripts publish-pages $PWD",
+    "build:static": "webpack --mode=\"production\""
+  },
+  "peerDependencies": {
+    "webpack-dev-server": "^3.1.10"
+  }
+}
