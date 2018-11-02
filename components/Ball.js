@@ -1,15 +1,6 @@
 // @flow
 import * as React from 'react';
-import ReactDOM from 'react-dom';
-import { normalize } from 'polished';
-import styled, { createGlobalStyle } from 'styled-components';
-
-const BodyStyles = createGlobalStyle`
-body {
-    margin: 0px;
-    background-color: #000;
-}
-${normalize()}`;
+import styled from 'styled-components';
 
 const calculateSize = (src, dst) => {
   const srcRatio = src.width / src.height;
@@ -27,11 +18,25 @@ const calculateSize = (src, dst) => {
   }
 };
 
-export default class Bounce extends React.Component {
+type StateType = {
+  drawing: boolean,
+  top: number,
+  left: number,
+  height: number,
+  width: number,
+  vDirection: number,
+  hDirection: number,
+  stream?: MediaStreamTrack,
+};
+type PropsType = {};
+
+export default class Bounce extends React.Component<PropsType, StateType> {
   state = {
     drawing: true,
     top: 0,
     left: 0,
+    height: 0,
+    width: 0,
     vDirection: Math.random() * 5,
     hDirection: Math.random() * 5,
   };
@@ -40,7 +45,19 @@ export default class Bounce extends React.Component {
   video: React.ElementRef<'video'> | null = null;
 
   componentDidMount = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({
+    const { mediaDevices } = navigator;
+
+    if (!mediaDevices) {
+      throw new Error('This browser does not support webcam');
+    }
+
+    const { getUserMedia } = mediaDevices;
+
+    if (!getUserMedia) {
+      throw new Error('This browser does not support webcam');
+    }
+
+    const stream = await getUserMedia({
       video: { width: { min: 200 }, height: { min: 200 } },
       audio: false,
     });
@@ -51,14 +68,19 @@ export default class Bounce extends React.Component {
     this.setState({ stream: stream.getVideoTracks()[0] }, () => this.draw());
   };
 
-  onCanvas = (canvas: React.ElementRef<'canvas'>) => {
-    this.ref = canvas;
-    this.draw();
+  onCanvas = (canvas: ?React.ElementRef<'canvas'>) => {
+    if (canvas) {
+      this.ref = canvas;
+      this.draw();
+    }
   };
 
-  onVideo = video => {
+  onVideo = (video: ?React.ElementRef<'video'>) => {
+    if (!video) {
+      return;
+    }
+
     this.video = video;
-    this.video.srcObject = this.stream;
     const { width, height } = calculateSize(
       { width: video.videoWidth, height: video.videoHeight },
       { width: 200, height: 200 },
@@ -107,9 +129,9 @@ export default class Bounce extends React.Component {
 
   move = () => {
     const { height, width, drawing } = this.state;
+    let { vDirection, hDirection, top, left } = this.state;
     const pageHeight = window.innerHeight;
     const pageWidth = window.innerWidth;
-    let { vDirection, hDirection, top, left } = this.state;
 
     if (drawing) {
       return;

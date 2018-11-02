@@ -11,11 +11,15 @@ body {
 }
 ${normalize()}`;
 
-export default class Bounce extends React.Component {
-  state = { ballCount: 1 };
+type StateType = { ballCount: number, height: number, width: number };
+export default class Bounce extends React.Component<{}, StateType> {
+  state = { ballCount: 1, height: 0, width: 0 };
   ref: React.ElementRef<'div'> | null = null;
 
-  onRef = ref => {
+  onRef = (ref: ?React.ElementRef<'div'>) => {
+    if (!ref) {
+      return;
+    }
     const { clientWidth, clientHeight } = ref;
     this.setState({ width: clientWidth, height: clientHeight });
   };
