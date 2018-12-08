@@ -1,5 +1,5 @@
 {
-  "name": "bounce",
+  "name": "@mprobber/bounce",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -8,13 +8,15 @@
     "polished": "^2.3.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "react-helmet": "^5.2.0",
     "styled-components": "^4.0.2",
-    "superagent": "^4.0.0-beta.5"
+    "superagent": "^4.0.0-beta.5",
+    "@mprobber/static-build": "1.0.0",
+    "@mprobber/publish-pages": "1.0.0"
   },
   "scripts": {
-    "start": "webpack-dev-server",
-    "build": "yarn build:static && yarn workspace scripts publish-pages $PWD",
-    "build:static": "webpack --mode=\"production\""
+    "start": "static-dev",
+    "build": "static-build && publish-pages $PWD"
   },
   "peerDependencies": {
     "webpack-dev-server": "^3.1.10"

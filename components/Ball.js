@@ -45,27 +45,19 @@ export default class Bounce extends React.Component<PropsType, StateType> {
   video: React.ElementRef<'video'> | null = null;
 
   componentDidMount = async () => {
-    const { mediaDevices } = navigator;
-
-    if (!mediaDevices) {
-      throw new Error('This browser does not support webcam');
+    if (navigator && navigator.mediaDevices) {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { width: { min: 200 }, height: { min: 200 } },
+        audio: false,
+      });
+      this.videoStreams = stream;
+      if (this.video) {
+        this.video.srcObject = stream;
+      }
+      this.setState({ stream: stream.getVideoTracks()[0] }, () => this.draw());
+    } else {
+      throw new Error('Could not get webcam');
     }
-
-    const { getUserMedia } = mediaDevices;
-
-    if (!getUserMedia) {
-      throw new Error('This browser does not support webcam');
-    }
-
-    const stream = await getUserMedia({
-      video: { width: { min: 200 }, height: { min: 200 } },
-      audio: false,
-    });
-    this.videoStreams = stream;
-    if (this.video) {
-      this.video.srcObject = stream;
-    }
-    this.setState({ stream: stream.getVideoTracks()[0] }, () => this.draw());
   };
 
   onCanvas = (canvas: ?React.ElementRef<'canvas'>) => {

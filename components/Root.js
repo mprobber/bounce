@@ -2,11 +2,13 @@
 import * as React from 'react';
 import { normalize } from 'polished';
 import styled, { createGlobalStyle } from 'styled-components';
+import { Helmet } from 'react-helmet';
 import Ball from './Ball';
 
 const BodyStyles = createGlobalStyle`
 body {
     margin: 0px;
+    height: 100vh;
     background-color: #000;
 }
 ${normalize()}`;
@@ -36,6 +38,9 @@ export default class Bounce extends React.Component<{}, StateType> {
     } = this;
     return (
       <Background onClick={addBall} ref={onRef}>
+        <Helmet>
+          <title>BOUNCE</title>
+        </Helmet>
         <BodyStyles />
         {[...Array(ballCount)].map((_, idx) => (
           <Ball key={idx} />
