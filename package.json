@@ -11,8 +11,8 @@
     "react-helmet": "^5.2.0",
     "styled-components": "^4.0.2",
     "superagent": "^4.0.0-beta.5",
-    "@mprobber/static-build": "1.0.0",
-    "@mprobber/publish-pages": "1.0.0"
+    "@mprobber/static-build": "latest",
+    "@mprobber/publish-pages": "latest"
   },
   "scripts": {
     "start": "static-dev",
