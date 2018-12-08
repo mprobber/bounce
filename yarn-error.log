@@ -40,12 +40,12 @@ npm manifest:
       "react-helmet": "^5.2.0",
       "styled-components": "^4.0.2",
       "superagent": "^4.0.0-beta.5",
-      "@mprobber/static-build": "latest"
+      "@mprobber/static-build": "latest",
+      "@mprobber/publish-pages": "latest"
     },
     "scripts": {
       "start": "static-dev",
-      "build": "yarn build:static && yarn workspace scripts publish-pages $PWD",
-      "build:static": "webpack --mode=\"production\""
+      "build": "static-build && publish-pages $PWD"
     },
     "peerDependencies": {
       "webpack-dev-server": "^3.1.10"
